@@ -1,0 +1,21 @@
+{
+    "name": "hanscity/danche",
+    "description": "framework learn form PatrickLouys",
+    "keywords": ["framwork", "danche"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "hanscity",
+            "email": "hanscity1111@gmail.com",
+            "role": "Creator / Learner "
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}
