@@ -1,6 +1,9 @@
 <?php declare(strict_types = 1);
 
-namespace Example;
+namespace App;
+
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -21,4 +24,18 @@ if ($environment !== 'production') {
 }
 $whoops->register();
 
-throw new \Exception;
+//throw new \Exception;
+$request = new \Http\HttpRequest($_GET, $_POST, $_COOKIE, $_FILES, $_SERVER);
+
+$response = new \Http\HttpResponse;
+foreach ($response->getHeaders() as $header) {
+    header($header, false);
+}
+
+$content = '<h1>Hello World</h1>';
+$response->setContent($content);
+echo $response->getContent();
+
+//$response->setContent('404 - Page not found');
+//$response->setStatusCode(404);
+//echo $response->getContent();
