@@ -11,6 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 require __DIR__ . '/../vendor/autoload.php';
+$injector = include('Dependencies.php');
+
+$request = $injector->make('Http\HttpRequest');
+$response = $injector->make('Http\HttpResponse');
 
 $log = new Logger('name');
 $file_log = $_SERVER['DOCUMENT_ROOT'].'/../storage/logs/'.date('Y-m-d') . '_info.log';
@@ -33,8 +37,6 @@ if ($environment !== 'production') {
 }
 $whoops->register();
 
-$request = new HttpRequest($_GET, $_POST, $_COOKIE, $_FILES, $_SERVER);
-$response = new HttpResponse();
 
 $routeDefinitionCallback = function (RouteCollector $r) {
     $routes = include('Routes.php');
@@ -60,7 +62,7 @@ switch ($routeInfo[0]) {
         $method = $routeInfo[1][1];
         $vars = $routeInfo[2];
 
-        $class = new $className($response);
+        $class = $injector->make($className);
         $class->$method($vars);
         break;
 }
