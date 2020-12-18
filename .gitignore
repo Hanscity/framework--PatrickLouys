@@ -1,3 +1,4 @@
 vendor/
 .idea/
 storage/logs/*
+public/test
