@@ -3,12 +3,6 @@
 namespace App;
 
 use FastRoute\RouteCollector;
-use Http\HttpRequest;
-use Http\HttpResponse;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 require __DIR__ . '/../vendor/autoload.php';
 $injector = include('Dependencies.php');
@@ -16,18 +10,9 @@ $injector = include('Dependencies.php');
 $request = $injector->make('Http\HttpRequest');
 $response = $injector->make('Http\HttpResponse');
 
-$log = new Logger('name');
-$file_log = $_SERVER['DOCUMENT_ROOT'].'/../storage/logs/'.date('Y-m-d') . '_info.log';
-$log->pushHandler(new StreamHandler($file_log, Logger::INFO));
-$log->info(__FILE__.'==>'.__LINE__.'==',[1111]);
-
 error_reporting(E_ALL);
 $environment = 'development';
-
-/**
- * Register the error handler
- */
-$whoops = new \Whoops\Run;
+$whoops = $injector->make('\Whoops\Run');
 if ($environment !== 'production') {
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 } else {
@@ -44,10 +29,8 @@ $routeDefinitionCallback = function (RouteCollector $r) {
         $r->addRoute($route[0], $route[1], $route[2]);
     }
 };
-
 $dispatcher = \FastRoute\simpleDispatcher($routeDefinitionCallback);
 $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getPath());
-
 switch ($routeInfo[0]) {
     case \FastRoute\Dispatcher::NOT_FOUND:
         $response->setContent('404 - Page not found');
