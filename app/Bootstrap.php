@@ -7,8 +7,8 @@ use FastRoute\RouteCollector;
 require __DIR__ . '/../vendor/autoload.php';
 $injector = include('Dependencies.php');
 
-$request = $injector->make('Http\HttpRequest');
-$response = $injector->make('Http\HttpResponse');
+$request = $injector->make('Http\Request');
+$response = $injector->make('Http\Response');
 
 error_reporting(E_ALL);
 $environment = 'development';
